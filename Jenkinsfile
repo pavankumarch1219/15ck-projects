@@ -18,7 +18,7 @@ pipeline {
         stage('Terraform Init') {
             steps {
                 sh '''
-                cd datetime-terraform-platform/terraform
+                cd terraform
                 terraform init
                 '''
             }
@@ -27,7 +27,7 @@ pipeline {
         stage('Terraform Plan') {
             steps {
                 sh '''
-                cd datetime-terraform-platform/terraform
+                cd terraform
                 terraform plan
                 '''
             }
@@ -36,7 +36,7 @@ pipeline {
         stage('Terraform Apply') {
             steps {
                 sh '''
-                cd datetime-terraform-platform/terraform
+                cd terraform
                 terraform apply -auto-approve
                 '''
             }
@@ -45,14 +45,10 @@ pipeline {
         stage('Deploy DateTime App') {
             steps {
                 sh '''
-                scp datetime-terraform-platform/app/index.jsp \
-                ${KOREA_VM}:${TOMCAT_DIR}/datetime-app/index.jsp
-
-                scp datetime-terraform-platform/app/index.jsp \
-                ${WESTUS_VM}:${TOMCAT_DIR}/datetime-app/index.jsp
+                scp app/index.jsp ${KOREA_VM}:${TOMCAT_DIR}/datetime-app/index.jsp
+                scp app/index.jsp ${WESTUS_VM}:${TOMCAT_DIR}/datetime-app/index.jsp
                 '''
             }
         }
     }
 }
-
